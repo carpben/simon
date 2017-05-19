@@ -1,0 +1,17 @@
+body {
+  background-color: black;
+}
+#outer-circle {
+  width:450px;
+  height: 450px;
+  border-radius: 50% ;
+  background-color:white;
+  display: flex
+}
+#inner-circle {
+  width:250px;
+  height:250px;
+  border-radius: 50%;
+  background-color: black;
+  margin: auto;
+}
