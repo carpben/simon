@@ -61,6 +61,7 @@ body {
 }
 #control button {
   border-radius: 50%;
+  font-weight: bold;
 }
 input {
   display: inline-block;
