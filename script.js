@@ -13,6 +13,7 @@ function SimonGame (options){
 
     highlightedColor: null,
     mistake: false
+    success: false
   }
 
 
@@ -35,6 +36,7 @@ function SimonGame (options){
 
     let soundURL = ""
     if (state.mistake){soundURL = "/mistake.mp3"}
+    else if (state.success){soundURL = "/success.wav"}
     else if (state.highlightedColor){
      const colorsoundURL = {
        red: "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3",
@@ -78,6 +80,7 @@ function startUserTurn(){
   //reset some state stuff
   state.squareClickReady = true
   state.mistake = false
+  state.success = false
   state.step=0
 }
 
@@ -90,6 +93,15 @@ function handleUserMistake(){
       .then(()=>{startUserTurn()})
   ,2000)
   }
+
+function handleUserSuccess(){
+  state.squareClickReady = false
+  state.success = true
+  render()
+  state.success = false 
+
+  setTimeout(startNextChallenge, 2500 )
+}
 
 function colorSquareClicked(color){
   if (!state.squareClickReady){return}
@@ -104,8 +116,7 @@ function colorSquareClicked(color){
   brightenColor(color)
     .then(()=>{
       if (state.step === state.colorSequence.length){
-        state.squareClickReady = false
-        setTimeout(startNextChallenge, 1000 )
+        handleUserSuccess()
       } else {
         state.squareClickReady = true
       }
