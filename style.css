@@ -16,8 +16,10 @@ body {
   width: 500px;
 }
 
-#title {
+#questionView {
+  text-align: center;
 }
+
 #board {
   display: flex;
   justify-content: center;
@@ -28,6 +30,10 @@ body {
   height: 200px;
   width:200px;
   margin: 20px;
+  font-size: 45px;
+  text-align: center;
+  line-height: 200px;
+
 }
 #red{
   background-color: red;
@@ -59,10 +65,14 @@ body {
 
   /*justify-content: center;*/
 }
-#control button {
+#start {
   border-radius: 50%;
   font-weight: bold;
 }
+.active {
+  background-color: #aaa !important;
+}
+
 input {
   display: inline-block;
   background-color: white;
