@@ -67,7 +67,7 @@ function SimonGame (options){
       setTimeout(function(){
         deBrightenColors()
         resolve()
-      }, 1000)
+      }, 800)
     })
   }
 
@@ -149,7 +149,7 @@ function addColorToSequence(){
 
 function showSequence(colorSequence=[]) {
   colorSequence = colorSequence.slice(0)
-  const DELAY = 350
+  const DELAY = 175
 
   if(colorSequence.length === 0) {
     return new Promise (function(resolve, reject){
