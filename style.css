@@ -37,9 +37,11 @@ body {
 }
 #red{
   background-color: red;
+  border-top-left-radius: 50%
 }
 #green {
   background-color: green;
+  border-top-right-radius: 50%
 }
 #blue {
   background-color: blue;

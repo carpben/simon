@@ -7,7 +7,7 @@ const COLORNAMES = ["red", "green", "blue", "yellow"]
 
 function SimonGame (options){
   state = {
-    challenge:6,
+    challenge:20,
     strict: false,
     colorSequence:[],
     squareClickReady: false,
@@ -67,7 +67,7 @@ function SimonGame (options){
       setTimeout(function(){
         deBrightenColors()
         resolve()
-      }, 800)
+      }, 1000)
     })
   }
 
