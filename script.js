@@ -55,22 +55,25 @@ function SimonGame (options){
     }
   }
 
-  function brightenColor(color){
-    function deBrightenColors(){
-      state.highlightedColor = null
-      render()
-    }
+  function deBrightenColor(){
+    state.highlightedColor = null
+    render()
+  }
 
+  function brightenColor(color){
     state.highlightedColor = color
     render()
+  }
+
+  function showComputerColor(){
+    brightenColor()
     return new Promise(function(resolve,reject){
       setTimeout(function(){
-        deBrightenColors()
+        deBrightenColor()
         resolve()
       }, 1000)
     })
   }
-
 
 //------   USER   -------
 
@@ -158,7 +161,7 @@ function showSequence(colorSequence=[]) {
   }
 
   let color = colorSequence.shift()
-  return brightenColor(color)
+  return showComputerColor(color)
     .then(()=>{
       setTimeout(function(){showSequence(colorSequence)},DELAY)
     })
