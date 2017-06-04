@@ -24,6 +24,7 @@ body {
   display: flex;
   justify-content: center;
   flex-flow: wrap;
+  margin: 15px auto;
 }
 
 .color{
@@ -37,19 +38,19 @@ body {
 }
 #red{
   background-color: red;
-  border-top-left-radius: 100%
+  border-top-left-radius: 25%
 }
 #green {
   background-color: green;
-  border-top-right-radius: 100%
+  border-top-right-radius: 25%
 }
 #blue {
   background-color: blue;
-  border-bottom-left-radius: 100%
+  border-bottom-left-radius: 25%
 }
 #yellow {
   background-color: yellow;
-  border-bottom-right-radius: 100%
+  border-bottom-right-radius: 25%
 }
 #red.light {
   background-color: pink;
