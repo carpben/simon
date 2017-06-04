@@ -1,3 +1,9 @@
+//--------------------------
+//------ SIMON GAME --------
+//--------------------------
+
+//------ State -------------
+
 const TURN = {
   computer: 0,
   user: 1
@@ -7,6 +13,7 @@ const COLORNAMES = ["red", "green", "blue", "yellow"]
 
 function SimonGame (options){
   state = {
+    questionView:true,
     challenge:20,
     strict: false,
     colorSequence:[],
@@ -16,23 +23,46 @@ function SimonGame (options){
     gameSuccess: false,
   }
 
-  function render (){
-    WinText=["You", "Made", "It", "!!!"]
+  //------ Display -------------
 
-    let title = `<div id="title" class="text-center"><h1>Simon</h1></div>`
+  function htmlQuestionView(){
+    function buttonHTML(data, text){
+      return `<button type="button" class="btn btn-default" data=${data}>${text}</button>`
+    }
+    function htmlSpaces (times){
+      return '&emsp;'.repeat(times)
+    }
+
+    return `<div id="questionView"><p>Choose your challenge:\n</p>
+    ${buttonHTML(5, "5")}
+    ${buttonHTML(10, "10")}
+    ${buttonHTML(15, "15")}
+    ${buttonHTML(20, "20")}
+    </div>`
+  }
+
+  function htmlGame(){
+    WinText=["You", "Made", "It", "!!!"]
     const steps = state.colorSequence.length
 
     let board =COLORNAMES.reduce((accu, color, indx)=>{
       let extraclass = state.highlightedColor === color ? 'light' : ''
-      return accu + `<div id="${color}" data-color="${color}" class="color-square ${extraclass}">
+      return accu + `<div id="${color}" data-color="${color}" class="color ${extraclass}">
       ${ (state.gameSuccess) ? WinText[indx] : "" } </div>`
     }, "")
+    board = `<div id='board'> ${board} <div id=center></div></div>`
 
     let control = `<div id="control"><button type="button" id="start" class="btn btn-default btn-lg">GO!</button>
     <button id="strict" type="button" class="btn btn-default ${state.strict? "active" : "" }"> Strict </button>
     <div id="steps"><h3>STEPS: <span> ${steps} </span></h3></div><div id="challenge"><h3>challenge: <span> ${state.challenge} </span></h3></div></div>`
 
-    options.el.innerHTML = `${title}  <div id='board'> ${board} </div>  ${control}`
+    return `${board} ${control}`
+  }
+
+  function render (){
+    let title = `<div id="title" class="text-center"><h1>SIMON</h1></div>`
+
+    options.el.innerHTML = `${title} ${state.questionView? htmlQuestionView() : htmlGame()} `
 
     let soundURL = ""
     if (state.gameSuccess){soundURL = "/celebration.wav"}
@@ -66,15 +96,7 @@ function SimonGame (options){
     render()
   }
 
-  function showComputerColor(color){
-    brightenColor(color)
-    return new Promise(function(resolve,reject){
-      setTimeout(function(){
-        deBrightenColor()
-        resolve()
-      }, 800)
-    })
-  }
+
 
 //------   USER   -------
 
@@ -108,7 +130,6 @@ function handleUserMistake(){
 }
 
 function handleLevelSuccess(){
-  state.squareClickReady = false
   state.success = true
   render()
   state.success = false
@@ -120,7 +141,7 @@ function handleGameSuccess(){
   render()
 }
 
-function colorSquareMouseDown(color){
+function colorDivMouseDown(color){
   // if (!state.squareClickReady){return}
   // state.squareClickReady=false
 
@@ -143,7 +164,7 @@ function colorSquareMouseDown(color){
     // })
 }
 
-function colorSquareMouseUp(){
+function colorDivMouseUp(){
   deBrightenColor()
 
   if (state.step==state.challenge){
@@ -160,6 +181,16 @@ function colorSquareMouseUp(){
 function addColorToSequence(){
   let randomColor = COLORNAMES[Math.floor(Math.random() * COLORNAMES.length)]
   state.colorSequence.push(randomColor)
+}
+
+function showComputerColor(color){
+  brightenColor(color)
+  return new Promise(function(resolve,reject){
+    setTimeout(function(){
+      deBrightenColor()
+      resolve()
+    }, 800)
+  })
 }
 
 function showSequence(colorSequence=[]) {
@@ -193,6 +224,12 @@ function startNextlevel(){
 
 //------   Button Handlers   -------
 
+function setChallenge(ev){
+  state.challenge = $(ev.currentTarget).attr('data')
+  state.questionView = false
+  render()
+}
+
 function startNewGame(){
   state.colorSequence=[]
   startNextlevel()
@@ -203,16 +240,16 @@ function toggleStrictMode(){
   render()
 }
 
-
   render()
 
+  $(options.el).on('click', '#questionView button', setChallenge)
   $(options.el).on('click', '#start', startNewGame)
   $(options.el).on('click', '#strict', toggleStrictMode )
-  $(options.el).on('mousedown', `.color-square`, function(ev){
-    colorSquareMouseDown($(ev.currentTarget).attr('data-color'))
+  $(options.el).on('mousedown', `.color`, function(ev){
+    colorDivMouseDown($(ev.currentTarget).attr('data-color'))
   })
-  $(options.el).on('mouseup', `.color-square`, function(ev){
-    colorSquareMouseUp()
+  $(options.el).on('mouseup', `.color`, function(ev){
+    colorDivMouseUp()
   })
 
 }

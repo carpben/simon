@@ -1,53 +1,54 @@
 
 
-body {
+html, body {
   background-color: black;
-  display: flex;
   height: 100%;
   width: 100%;
   color: white;
 }
 
 #root{
-  margin:auto;
-  display: flex;
-  flex-flow: column;
-  height: 600px;
-  width: 500px;
+  width: 460px;
 }
 
+#test {
+  margin: auto;
+}
 #questionView {
   text-align: center;
 }
 
 #board {
-  display: flex;
-  justify-content: center;
-  flex-flow: wrap;
+  width: 460px;
 }
 
-.color-square{
+
+.color{
+  float:left;
   height: 200px;
   width:200px;
-  margin: 20px;
+  margin: 15px;
   font-size: 45px;
   text-align: center;
   line-height: 200px;
-
+  z-index: -10;
 }
 #red{
   background-color: red;
-  border-top-left-radius: 50%
+  border-top-left-radius: 100%
 }
 #green {
   background-color: green;
-  border-top-right-radius: 50%
+  border-top-right-radius: 100%
 }
 #blue {
   background-color: blue;
+  border-bottom-left-radius: 100%
 }
 #yellow {
   background-color: yellow;
+  border-bottom-right-radius: 100%
+
 }
 #red.light {
   background-color: pink;
@@ -61,8 +62,14 @@ body {
 #yellow.light {
   background-color: #ff7
 }
+#center {
+  position: relative;
+  z-index: 1000;
+  width:150px;
+  height:150px;
+  margin: 60px
+}
 #control {
-  display: flex;
   justify-content: space-around;
 
   /*justify-content: center;*/
