@@ -15,7 +15,7 @@ function SimonGame (options){
   state = {
     questionView:true,
     challenge:0,
-    turn = TURN.computer
+    turn: TURN.computer,
     strict: false,
     colorSequence:[],
     highlightedColor: null,
@@ -101,6 +101,7 @@ function SimonGame (options){
 
 function startUserTurn(){
   //reset some state stuff
+  state.turn=TURN.user
   state.mistake = false
   state.success = false
   state.step=0
@@ -140,7 +141,7 @@ function handleGameSuccess(){
   render()
 }
 
-function colorDivMouseDown(color){
+function colorMouseDown(color){
   if (state.turn!=TURN.user){return}
 
   // if (!state.squareClickReady){return}
@@ -165,7 +166,7 @@ function colorDivMouseDown(color){
     // })
 }
 
-function colorDivMouseUp(){
+function colorMouseUp(){
   if (state.turn!=TURN.user){return}
   deBrightenColor()
 
@@ -229,7 +230,7 @@ function setChallenge(ev){
 }
 
 function startNewGame(){
-  if (state.turn!=TURN.user){return}
+  if (state.turn!=TURN.computer){return}
   state.colorSequence=[]
   startNextlevel()
 }
@@ -246,10 +247,10 @@ function toggleStrictMode(){
   $(options.el).on('click', '#start', startNewGame)
   $(options.el).on('click', '#strict', toggleStrictMode )
   $(options.el).on('mousedown', `.color`, function(ev){
-    colorDivMouseDown($(ev.currentTarget).attr('data-color'))
+    colorMouseDown($(ev.currentTarget).attr('data-color'))
   })
   $(options.el).on('mouseup', `.color`, function(ev){
-    colorDivMouseUp()
+    colorMouseUp()
   })
 
 }

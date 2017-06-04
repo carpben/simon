@@ -1,36 +1,39 @@
 
 
-html, body {
+body {
   background-color: black;
+  display: flex;
   height: 100%;
   width: 100%;
   color: white;
 }
 
 #root{
-  width: 460px;
+  margin:auto;
+  display: flex;
+  flex-flow: column;
+  height: 600px;
+  width: 500px;
 }
 
-#test {
-  margin: auto;
-}
 #questionView {
   text-align: center;
 }
 
 #board {
-  width: 460px;
+  display: flex;
+  justify-content: center;
+  flex-flow: wrap;
 }
 
 .color{
-  float:left;
   height: 200px;
   width:200px;
   margin: 10px;
   font-size: 45px;
   text-align: center;
-  line-height: 180px;
-  z-index: -10;
+  line-height: 200px;
+
 }
 #red{
   background-color: red;
@@ -47,7 +50,6 @@ html, body {
 #yellow {
   background-color: yellow;
   border-bottom-right-radius: 100%
-
 }
 #red.light {
   background-color: pink;
@@ -61,15 +63,8 @@ html, body {
 #yellow.light {
   background-color: #ff7
 }
-
-#center {
-  position: absolute;
-  z-index: 1000;
-  width:150px;
-  height:150px;
-  margin: 60px
-}
 #control {
+  display: flex;
   justify-content: space-around;
 
   /*justify-content: center;*/
