@@ -10,7 +10,6 @@ function SimonGame (options){
     challenge:20,
     strict: false,
     colorSequence:[],
-    squareClickReady: false,
     highlightedColor: null,
     mistake: false,
     levelSuccess: false,
@@ -41,10 +40,10 @@ function SimonGame (options){
     else if (state.success){soundURL = "/success.wav"}
     else if (state.highlightedColor){
      const colorsoundURL = {
-       red: "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3",
-       green: "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3",
-       blue: "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3",
-       yellow: "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3",
+       red: "/simonSound1.wav",
+       green: "/simonSound2.wav",
+       blue: "/simonSound3.wav",
+       yellow: "/simonSound4.wav",
      }
      soundURL = colorsoundURL[state.highlightedColor]
     }
@@ -56,22 +55,24 @@ function SimonGame (options){
   }
 
   function deBrightenColor(){
+    console.log('deBrightenColor')
     state.highlightedColor = null
     render()
   }
 
   function brightenColor(color){
+    console.log('BrightenColor')
     state.highlightedColor = color
     render()
   }
 
-  function showComputerColor(){
-    brightenColor()
+  function showComputerColor(color){
+    brightenColor(color)
     return new Promise(function(resolve,reject){
       setTimeout(function(){
         deBrightenColor()
         resolve()
-      }, 1000)
+      }, 800)
     })
   }
 
@@ -79,10 +80,10 @@ function SimonGame (options){
 
 function startUserTurn(){
   //reset some state stuff
-  state.squareClickReady = true
   state.mistake = false
   state.success = false
   state.step=0
+
 }
 
 function handleUserMistake(){
@@ -119,9 +120,9 @@ function handleGameSuccess(){
   render()
 }
 
-function colorSquareClicked(color){
-  if (!state.squareClickReady){return}
-  state.squareClickReady=false
+function colorSquareMouseDown(color){
+  // if (!state.squareClickReady){return}
+  // state.squareClickReady=false
 
   if (state.colorSequence[state.step]!==color) {
     handleUserMistake()
@@ -130,16 +131,27 @@ function colorSquareClicked(color){
 
   state.step++
   brightenColor(color)
-    .then(()=>{
-      if (state.step==state.challenge){
-        handleGameSuccess()
-      }
-      else if (state.step === state.colorSequence.length){
-        handleLevelSuccess()
-      } else {
-        state.squareClickReady = true
-      }
-    })
+    // .then(()=>{
+    //   if (state.step==state.challenge){
+    //     handleGameSuccess()
+    //   }
+    //   else if (state.step === state.colorSequence.length){
+    //     handleLevelSuccess()
+    //   } else {
+    //     state.squareClickReady = true
+    //   }
+    // })
+}
+
+function colorSquareMouseUp(){
+  deBrightenColor()
+
+  if (state.step==state.challenge){
+    handleGameSuccess()
+  }
+  else if (state.step === state.colorSequence.length){
+    handleLevelSuccess()
+  }
 }
 //-----------------------
 
@@ -161,6 +173,7 @@ function showSequence(colorSequence=[]) {
   }
 
   let color = colorSequence.shift()
+
   return showComputerColor(color)
     .then(()=>{
       setTimeout(function(){showSequence(colorSequence)},DELAY)
@@ -193,11 +206,14 @@ function toggleStrictMode(){
 
   render()
 
-  $(options.el).on('click', `.color-square`, function(ev){
-    colorSquareClicked($(ev.currentTarget).attr('data-color'))
-  })
   $(options.el).on('click', '#start', startNewGame)
   $(options.el).on('click', '#strict', toggleStrictMode )
+  $(options.el).on('mousedown', `.color-square`, function(ev){
+    colorSquareMouseDown($(ev.currentTarget).attr('data-color'))
+  })
+  $(options.el).on('mouseup', `.color-square`, function(ev){
+    colorSquareMouseUp()
+  })
 
 }
 
