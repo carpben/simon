@@ -14,7 +14,8 @@ const COLORNAMES = ["red", "green", "blue", "yellow"]
 function SimonGame (options){
   state = {
     questionView:true,
-    challenge:20,
+    challenge:0,
+    turn = TURN.computer
     strict: false,
     colorSequence:[],
     highlightedColor: null,
@@ -96,8 +97,6 @@ function SimonGame (options){
     render()
   }
 
-
-
 //------   USER   -------
 
 function startUserTurn(){
@@ -142,6 +141,8 @@ function handleGameSuccess(){
 }
 
 function colorDivMouseDown(color){
+  if (state.turn!=TURN.user){return}
+
   // if (!state.squareClickReady){return}
   // state.squareClickReady=false
 
@@ -165,6 +166,7 @@ function colorDivMouseDown(color){
 }
 
 function colorDivMouseUp(){
+  if (state.turn!=TURN.user){return}
   deBrightenColor()
 
   if (state.step==state.challenge){
@@ -174,7 +176,6 @@ function colorDivMouseUp(){
     handleLevelSuccess()
   }
 }
-//-----------------------
 
 //------   challenge   -------
 
@@ -219,9 +220,6 @@ function startNextlevel(){
 }
 
 
-
-//----------------------------
-
 //------   Button Handlers   -------
 
 function setChallenge(ev){
@@ -231,11 +229,13 @@ function setChallenge(ev){
 }
 
 function startNewGame(){
+  if (state.turn!=TURN.user){return}
   state.colorSequence=[]
   startNextlevel()
 }
 
 function toggleStrictMode(){
+  if (state.turn!=TURN.user){return}
   state.strict = (!state.strict)
   render()
 }
