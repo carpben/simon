@@ -5,8 +5,9 @@
 //------ State -------------
 
 const TURN = {
-  computer: 0,
-  user: 1
+  neither: 0,
+  computer: 1,
+  user: 2
 }
 
 const COLORNAMES = ["red", "green", "blue", "yellow"]
@@ -15,7 +16,7 @@ function SimonGame (options){
   state = {
     questionView:true,
     challenge:0,
-    turn: TURN.computer,
+    turn: TURN.neither,
     strict: false,
     colorSequence:[],
     highlightedColor: null,
@@ -54,8 +55,8 @@ function SimonGame (options){
     board = `<div id='board'> ${board} <div id=center></div></div>`
 
     let control = `<div id="control"><button type="button" id="start" class="btn btn-default btn-lg">GO!</button>
-    <button id="strict" type="button" class="btn btn-default ${state.strict? "active" : "" }"> Strict </button>
-    <div id="steps"><h3>STEPS: <span> ${steps} </span></h3></div><div id="challenge"><h3>challenge: <span> ${state.challenge} </span></h3></div></div>`
+    <button id="strict" type="button" class="btn btn-default btn-lg ${state.strict? "active" : "" }"> Strict </button>
+    <div id="steps"><h3>steps: <span> ${steps} </span></h3></div><div id="challenge"><h3>challenge: <span> ${state.challenge} </span></h3></div></div>`
 
     return `${board} ${control}`
   }
@@ -138,6 +139,7 @@ function handleLevelSuccess(){
 
 function handleGameSuccess(){
   state.gameSuccess = true
+  state.turn = TURN.end
   render()
 }
 
@@ -214,6 +216,7 @@ function showSequence(colorSequence=[]) {
 }
 
 function startNextlevel(){
+  state.turn=TURN.computer
   addColorToSequence()
   showSequence(state.colorSequence).then(()=>{
     startUserTurn()
@@ -230,12 +233,13 @@ function setChallenge(ev){
 }
 
 function startNewGame(){
-  if (state.turn!=TURN.computer){return}
+  if (state.turn==TURN.computer){return}
   state.colorSequence=[]
   startNextlevel()
 }
 
 function toggleStrictMode(){
+  if (state.turn==TURN.computer){return}
   if (state.turn!=TURN.user){return}
   state.strict = (!state.strict)
   render()
